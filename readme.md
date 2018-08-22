@@ -240,9 +240,3 @@ The following functionalities will be added in the future:
 
 It's a Chinese PinYin and pronounce 燃, means flame burning.
 
-## Author
-
-mengqi <https://github.com/m3ng9i>
-
-If you like this project, please give me a star.
-
