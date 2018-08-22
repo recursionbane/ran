@@ -36,18 +36,8 @@ THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 Use the command below to install the dependencies mentioned above, and build the binary into $GOPATH/bin.
 
 ```bash
-go get -u github.com/m3ng9i/ran
+go get -u github.com/recursionbane/ran
 ```
-
-For convenience, you can move the ran binary to a directory in the PATH environment variable.
-
-You can also call `./build.py` command under the Ran source directory to write version information into the binary, so that `ran -v` will give a significant result. Run `./build.py -h` for help.
-
-## Download binary
-
-You can also download the Ran binary without building it yourself.
-
-[Download Ran binary from the release page](https://github.com/m3ng9i/ran/releases).
 
 ## Run Ran
 
