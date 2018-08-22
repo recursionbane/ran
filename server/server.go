@@ -37,6 +37,9 @@ func serveFile(w http.ResponseWriter, r *http.Request, abspath string) error {
     }
 
     // http.ServeContent() always return a status code of 200.
+    // WARNING - ONLY USE BEHIND TRUSTED NETWORKS
+    // Allow requests from anywhere
+    w.Header().Set("Access-Control-Allow-Origin", "*")
     http.ServeContent(w, r, filename, info.ModTime(), f)
     return nil
 }
