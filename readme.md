@@ -33,10 +33,16 @@ THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 
 ## Installation
 
-Use the command below to install the dependencies mentioned above, and build the binary into $GOPATH/bin.
+Download the repository:
 
 ```bash
-go get -u github.com/recursionbane/ran
+git clone github.com/recursionbane/ran
+```
+
+Use go to build an executable (will create the "ran" binary):
+
+```bash
+go build
 ```
 
 ## Run Ran
