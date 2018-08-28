@@ -81,7 +81,7 @@ Options:
          --listdirasjson=<bool>      When this AND -listdir are set, return directory listings as JSON
     -sa, -serve-all=<bool>           Serve all paths even if the path is start with dot.
     -g,  -gzip=<bool>                Turn on or off gzip compression. Default value is true (means turn on).
-    -am, -auth-method=<auth>         Set authentication method, valid values are basic and digest. Default is basic.
+    -am, -auth-method=<auth>         Set authentication method, valid values are basic and digest. Default is basic
     -a,  -auth=<user:pass>           Turn on authentication and set username and password (separate by colon).
                                      After turn on authentication, all the page require authentication.
          -401=<path>                 Path of a custom 401 file, relative to Root. Example: /401.html.
