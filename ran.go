@@ -8,8 +8,8 @@ import "os"
 import "fmt"
 import "strings"
 import "sync"
-import "github.com/recursionbane/ran/global"
-import "github.com/recursionbane/ran/server"
+import "./global"
+import "./server"
 
 
 func catchSignal() {
