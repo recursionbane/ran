@@ -19,6 +19,7 @@ type context struct {
     indexPath       string  // if path is a directory, detect index path
                             // indexPath is a path contains index name and relative to root
                             // indexPath == path.Join(cleanPath, indexName)
+    listDirAsJSON   bool    // Server up directory listing as JSON
 }
 
 
@@ -56,6 +57,11 @@ func newContext(config Config, r *http.Request) (c *context, err error) {
     } else {
         c.exist = true
         c.isDir = info.IsDir()
+    }
+    
+    // If -listdirasjson is true, pass it into the context
+    if config.ListDirAsJSON {
+        c.listDirAsJSON = true
     }
 
     // if -serve-all is false and the path is a hidden path, then return 404 error.
