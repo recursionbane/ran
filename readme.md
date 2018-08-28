@@ -66,48 +66,47 @@ You can use the command line options to override the default configuration.
 Options:
 
 ```
-    -r,  -root=<path>        Root path of the site. Default is current working directory.
-    -p,  -port=<port>        HTTP port. Default is 8080.
-         -404=<path>         Path of a custom 404 file, relative to Root. Example: /404.html.
-    -i,  -index=<path>       File name of index, priority depends on the order of values.
-                             Separate by colon. Example: -i "index.html:index.htm"
-                             If not provide, default is index.html and index.htm.
-    -l,  -listdir=<bool>     When request a directory and no index file found,
-                             if listdir is true, show file list of the directory,
-                             if listdir is false, return 404 not found error.
-                             Default is false.
-    -sa, -serve-all=<bool>   Serve all paths even if the path is start with dot.
-    -g,  -gzip=<bool>        Turn on or off gzip compression. Default value is true (means turn on).
-
-    -am, -auth-method=<auth> Set authentication method, valid values are basic and digest. Default is basic.
-    -a,  -auth=<user:pass>   Turn on authentication and set username and password (separate by colon).
-                             After turn on authentication, all the page require authentication.
-         -401=<path>         Path of a custom 401 file, relative to Root. Example: /401.html.
-                             If authentication fails and 401 file is set,
-                             the file content will be sent to the client.
-
-         -tls-port=<port>    HTTPS port. Default is 443.
-         -tls-policy=<pol>   This option indicates how to handle HTTP and HTTPS traffic.
-                             There are three option values: redirect, both and only.
-                             redirect: redirect HTTP to HTTPS
-                             both:     both HTTP and HTTPS are enabled
-                             only:     only HTTPS is enabled, HTTP is disabled
-                             The default value is: only.
-         -cert=<path>        Load a file as a certificate.
-                             If use with -make-cert, will generate a certificate to the path.
-         -key=<path>         Load a file as a private key.
-                             If use with -make-cert, will generate a private key to the path.
+    -r,  -root=<path>                Root path of the site. Default is current working directory.
+    -p,  -port=<port>                HTTP port. Default is 8080.
+         -404=<path>                 Path of a custom 404 file, relative to Root. Example: /404.html.
+    -i,  -index=<path>               File name of index, priority depends on the order of values.
+                                     Separate by colon. Example: -i "index.html:index.htm"
+                                     If not provide, default is index.html and index.htm.
+    -l,  -listdir=<bool>             When request a directory and no index file found,
+                                     if listdir is true, show file list of the directory,
+                                     if listdir is false, return 404 not found error.
+                                     Default is false.
+         --listdirasjson=<bool>      When this AND -listdir are set, return directory listings as JSON
+    -sa, -serve-all=<bool>           Serve all paths even if the path is start with dot.
+    -g,  -gzip=<bool>                Turn on or off gzip compression. Default value is true (means turn on).
+    -am, -auth-method=<auth>         Set authentication method, valid values are basic and digest. Default is basic.
+    -a,  -auth=<user:pass>           Turn on authentication and set username and password (separate by colon).
+                                     After turn on authentication, all the page require authentication.
+         -401=<path>                 Path of a custom 401 file, relative to Root. Example: /401.html.
+                                     If authentication fails and 401 file is set,
+                                     the file content will be sent to the client.
+         -tls-port=<port>            HTTPS port. Default is 443.
+         -tls-policy=<pol>           This option indicates how to handle HTTP and HTTPS traffic.
+                                     There are three option values: redirect, both and only.
+                                     redirect: redirect HTTP to HTTPS
+                                     both:     both HTTP and HTTPS are enabled
+                                     only:     only HTTPS is enabled, HTTP is disabled
+                                     The default value is: only.
+         -cert=<path>                Load a file as a certificate.
+                                     If use with -make-cert, will generate a certificate to the path.
+         -key=<path>                 Load a file as a private key.
+                                     If use with -make-cert, will generate a private key to the path.
 ```
 
 Other options:
 
 ```
-         -make-cert          Generate a self-signed certificate and a private key used in TLS encryption.
-                             You should use -cert and -key to set the output paths.
-         -showconf           Show config info in the log.
-         -debug              Turn on debug mode.
-    -v,  -version            Show version information.
-    -h,  -help               Show help message.
+         -make-cert                  Generate a self-signed certificate and a private key used in TLS encryption.
+                                     You should use -cert and -key to set the output paths.
+         -showconf                   Show config info in the log.
+         -debug                      Turn on debug mode.
+    -v,  -version                    Show version information.
+    -h,  -help                       Show help message.
 ```
 
 If you want to shutdown Ran, type `ctrl+c` in the terminal, or kill it in the task manager.
