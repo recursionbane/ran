@@ -6,7 +6,7 @@ import "flag"
 import "strings"
 import "path/filepath"
 import phelper "github.com/m3ng9i/go-utils/path"
-import "github.com/recursionbane/ran/server"
+import "../server"
 
 
 // version information
