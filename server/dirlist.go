@@ -2,6 +2,7 @@ package server
 
 import "text/template"
 import "fmt"
+import "io"
 import "os"
 import "time"
 import "net/http"
@@ -10,13 +11,15 @@ import "html"
 import "path"
 import "path/filepath"
 import "strings"
-
+import "encoding/json"
 
 type dirListFiles struct {
     Name        string
     Url         string
     Size        int64
     ModTime     time.Time
+    IsDir       bool
+    Mode        os.FileMode
 }
 
 
@@ -136,6 +139,7 @@ func (this *RanServer) listDir(w http.ResponseWriter, serveAll bool, c *context)
         return
     }
 
+    // Override below if listdirasjson was set
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
     title := html.EscapeString(path.Base(c.cleanPath))
@@ -173,18 +177,30 @@ func (this *RanServer) listDir(w http.ResponseWriter, serveAll bool, c *context)
                 return
             }
 
-            files = append(files, dirListFiles{Name:"[..]", Url:parent, ModTime:info.ModTime()})
+            files = append(files, dirListFiles{Name:"[..]", Url:parent, ModTime:info.ModTime(), IsDir:true})
         }
 
-        files = append(files, dirListFiles{Name:name, Url:fileUrl.String(), Size:i.Size(), ModTime:i.ModTime()})
+        files = append(files, dirListFiles{Name:name, Url:fileUrl.String(), Size:i.Size(), ModTime:i.ModTime(), IsDir:i.IsDir(), Mode:i.Mode()})
     }
 
     data := dirList{ Title: title, Files: files}
 
+
     buf := bufferPool.Get()
     defer bufferPool.Put(buf)
 
-    tplDirList.Execute(buf, data)
+
+    if c.listDirAsJSON {
+        // Return entities as JSON structure
+        w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+        encoded_json, _ := json.Marshal(data)
+        io.WriteString(buf, string(encoded_json))
+    } else {
+        // Return HTML table
+        tplDirList.Execute(buf, data)
+    }
+
     size, _ = buf.WriteTo(w)
     return
 }
