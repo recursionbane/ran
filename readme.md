@@ -11,7 +11,7 @@ THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 
 ## Features
 
-- Directory listing
+- Directory listing (optionally as JSON)
 - Automatic gzip compression
 - Digest authentication
 - Access logging
