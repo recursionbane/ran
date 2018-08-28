@@ -5,6 +5,8 @@ Ran: a simple static web server written in Go
 
 Ran is a simple web server for serving static files.
 
+This fork supports directory listing as JSON.
+
 THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 
 ## Features
