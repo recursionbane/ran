@@ -5,13 +5,17 @@ Ran: a simple static web server written in Go
 
 Ran is a simple web server for serving static files.
 
-This fork supports directory listing as JSON.
+This fork adds several features:
+- Directory listing as JSON (--listdir=true --listdirasjson=true)
+- File extensions to hide (--ignorefileext=".config,.yaml")
+- Cross-origin requests (always enabled, caution)
 
-THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
+!!CAUTION!! THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 
 ## Features
 
 - Directory listing (optionally as JSON)
+- Ignore certain file extensions
 - Automatic gzip compression
 - Digest authentication
 - Access logging
@@ -38,12 +42,13 @@ THIS FORK ENABLES CROSS-ORIGIN REQUESTS - USE WITH CAUTION!
 Download the repository:
 
 ```bash
-git clone github.com/recursionbane/ran
+git clone https://github.com/recursionbane/ran
 ```
 
 Use go to build an executable (will create the "ran" binary):
 
 ```bash
+cd ran
 go build
 ```
 
@@ -79,6 +84,7 @@ Options:
                                      if listdir is false, return 404 not found error.
                                      Default is false.
          --listdirasjson=<bool>      When this AND -listdir are set, return directory listings as JSON
+         --ignorefileext=<str list>  A comma-separated list of file extensions that will not be served.
     -sa, -serve-all=<bool>           Serve all paths even if the path is start with dot.
     -g,  -gzip=<bool>                Turn on or off gzip compression. Default value is true (means turn on).
     -am, -auth-method=<auth>         Set authentication method, valid values are basic and digest. Default is basic
