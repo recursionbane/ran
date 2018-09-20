@@ -37,9 +37,7 @@ func serveFile(w http.ResponseWriter, r *http.Request, abspath string) error {
 	}
 
 	// http.ServeContent() always return a status code of 200.
-	// WARNING - ONLY USE BEHIND TRUSTED NETWORKS
-	// Allow requests from anywhere
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	http.ServeContent(w, r, filename, info.ModTime(), f)
 	return nil
 }
@@ -61,6 +59,11 @@ func (this *RanServer) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	requestId := string(getRequestId(r.URL.String()))
 
 	w.Header().Set("X-Request-Id", requestId)
+	// WARNING - ONLY USE BEHIND TRUSTED NETWORKS
+	// Allow requests from anywhere
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	this.logger.Debugf("#%s: r.URL: [%s]", requestId, r.URL.String())
 
@@ -150,6 +153,7 @@ func randTime(n ...int64) int {
 	rand.Seed(i)
 	return rand.Intn(2200) + 300 // [300,2499]
 }
+
 
 // make the request handler chain:
 // log -> authentication -> gzip -> original handler
