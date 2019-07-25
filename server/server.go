@@ -11,6 +11,56 @@ import "crypto/md5"
 import "github.com/m3ng9i/go-utils/log"
 import hhelper "github.com/m3ng9i/go-utils/http"
 
+// For user -> group validation
+import "os/user"
+import "syscall"
+
+// import "reflect"
+
+// For JWT validation
+import "strings"
+import "encoding/json"
+import "github.com/dgrijalva/jwt-go"
+
+// print the contents of the obj
+func PrettyPrint(data interface{}) {
+	var p []byte
+	//    var err := error
+	p, err := json.MarshalIndent(data, "", "\t")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s \n", p)
+}
+
+func IsInList(arr []string, str string) bool {
+	// Does the specifies array contain the specified string element?
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
+}
+
+func CanUserAccessFile(username string, abspath string) bool {
+	// Check if a given username belongs to a group that can read the supplied abspath file's contents based on its primary group
+	// Compare requested file's group ID (gid) and check against specified username's groups to see if user should be able to read this file
+	file_info, _ := os.Stat(abspath)
+	file_sys := file_info.Sys()
+	// fmt.Println(reflect.ValueOf(file_sys))
+	file_gid := fmt.Sprint(file_sys.(*syscall.Stat_t).Gid) // As a string
+
+	// fmt.Println(username + " is attempting to access " + abspath + " which has gid " + file_gid)
+
+	// Map username to User struct
+	r_user_obj, _ := user.Lookup(username)
+	r_user_groups, _ := r_user_obj.GroupIds()
+
+	return IsInList(r_user_groups, file_gid)
+}
+
 // serveFile() serve any request with content pointed by abspath.
 func serveFile(w http.ResponseWriter, r *http.Request, abspath string) error {
 	f, err := os.Open(abspath)
@@ -28,6 +78,39 @@ func serveFile(w http.ResponseWriter, r *http.Request, abspath string) error {
 	}
 
 	filename := info.Name()
+
+	// Check the incoming request headers to make sure an "id_token" cookie exists
+	cookie, _ := r.Cookie("id_token")
+	tokenString := cookie.Value
+
+	// Parse takes the token string and a function for looking up the key. The latter is especially
+	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
+	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
+	// to the callback, providing flexibility.
+	// Validate id_token as a JWT to ensure integrity is not compromised
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return token, nil
+	})
+
+	// TODO: Validate id_token against an external service to ensure it's not spoofed
+	claims, _ := token.Claims.(jwt.MapClaims)
+	splitter := strings.Split(fmt.Sprintf("%v", claims["upn"]), "@")
+	r_username := splitter[0]
+
+	// Check if user is part of at least one group that can read this file
+	if CanUserAccessFile(r_username, abspath) {
+		// fmt.Println("User can access file!")
+		// Proceed
+	} else {
+		fmt.Println(r_username + " cannot access file " + abspath)
+		// Do not serve the file
+		return nil
+	}
+
+	// temp, _ := json.Marshal(info.Sys())
+	// file_gid, _ := temp["Gid"]
+	// PrettyPrint(temp)
+	// PrettyPrint(token.Claims)
 
 	// TODO if client (use JavaScript) send a request head: 'Accept: "application/octet-stream"' then write the download header ?
 	// if the url contains a query like "?download", then download this file
@@ -153,7 +236,6 @@ func randTime(n ...int64) int {
 	rand.Seed(i)
 	return rand.Intn(2200) + 300 // [300,2499]
 }
-
 
 // make the request handler chain:
 // log -> authentication -> gzip -> original handler
